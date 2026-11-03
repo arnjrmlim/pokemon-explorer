@@ -6,6 +6,8 @@ function PokemonGrid({
   onPokemonClick,
   favorites = [],
   onToggleFavorite,
+  comparedPokemon = [],
+  onToggleCompare,
 }) {
   if (!pokemon.length) {
     return null;
@@ -18,6 +20,10 @@ function PokemonGrid({
           (favorite) => favorite.id === item.id
         );
 
+        const isCompared = comparedPokemon.some(
+          (compared) => compared.id === item.id
+        );
+
         return (
           <PokemonCard
             key={item.id}
@@ -25,6 +31,8 @@ function PokemonGrid({
             onClick={onPokemonClick}
             isFavorite={isFavorite}
             onToggleFavorite={onToggleFavorite}
+            isCompared={isCompared}
+            onToggleCompare={onToggleCompare}
           />
         );
       })}

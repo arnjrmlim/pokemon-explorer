@@ -1,5 +1,4 @@
-
-import { ArrowUpRight, Heart } from "lucide-react";
+import { ArrowUpRight, Heart, Plus, Check } from "lucide-react";
 
 const typeColors = {
   normal: "bg-gray-500/15 text-gray-300",
@@ -27,6 +26,8 @@ function PokemonCard({
   onClick,
   isFavorite = false,
   onToggleFavorite,
+  isCompared = false,
+  onToggleCompare,
 }) {
   const handleFavoriteClick = (event) => {
     event.stopPropagation();
@@ -59,37 +60,59 @@ function PokemonCard({
         focus-visible:ring-[#F6C945]
       "
     >
-      {/* Pokémon ID and Favorite Button */}
+      {/* Pokémon ID and Action Buttons */}
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold tracking-wider text-gray-500">
           #{String(pokemon.id).padStart(3, "0")}
         </span>
 
-        <button
-          type="button"
-          onClick={handleFavoriteClick}
-          aria-label={
-            isFavorite
-              ? `Remove ${pokemon.name} from favorites`
-              : `Add ${pokemon.name} to favorites`
-          }
-          aria-pressed={isFavorite}
-          className={`
-            rounded-full p-2 transition-all duration-200
-            hover:scale-110 hover:bg-[#263149]
-            ${
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggleCompare?.(pokemon);
+            }}
+            aria-label={
+              isCompared
+                ? `Remove ${pokemon.name} from comparison`
+                : `Add ${pokemon.name} to comparison`
+            }
+            aria-pressed={isCompared}
+            className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
+              isCompared
+                ? "text-[#F6C945]"
+                : "text-gray-500 hover:text-[#F6C945]"
+            }`}
+          >
+            {isCompared ? <Check size={19} /> : <Plus size={19} />}
+          </button>
+
+          <button
+            type="button"
+            onClick={(event) => {
+              event.stopPropagation();
+              onToggleFavorite?.(pokemon);
+            }}
+            aria-label={
+              isFavorite
+                ? `Remove ${pokemon.name} from favorites`
+                : `Add ${pokemon.name} to favorites`
+            }
+            aria-pressed={isFavorite}
+            className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
               isFavorite
                 ? "text-red-500"
                 : "text-gray-500 hover:text-red-400"
-            }
-          `}
-        >
-          <Heart
-            size={20}
-            strokeWidth={2}
-            fill={isFavorite ? "currentColor" : "none"}
-          />
-        </button>
+            }`}
+          >
+            <Heart
+              size={20}
+              strokeWidth={2}
+              fill={isFavorite ? "currentColor" : "none"}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Pokémon Artwork */}
