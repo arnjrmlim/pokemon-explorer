@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #080c17;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+::selection {
+  background-color: #f6c945;
+  color: #080c17;
+}
+
+/* Dark scrollbar */
+.dark-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #475569 #111A2C;
+}
+
+.dark-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: #111A2C;
+  border-radius: 10px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 10px;
+  border: 2px solid #111A2C;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Dark modal scrollbar */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #263149 #080C17;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-scrollbar::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: #080C17;
+  border-radius: 10px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: #263149;
+  border-radius: 10px;
+  border: 1px solid #080C17;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3b4963;
+}
+
+/* Hide outer modal scrollbar and prevent scroll chaining */
+.modal-overlay-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overscroll-behavior: none;
+}
+
+.modal-overlay-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Allow scrolling over interactive elements */
+.modal-scrollbar {
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Ensure connection arrows don't block interactions */
+.modal-scrollbar span.pointer-events-none {
+  pointer-events: none;
+}

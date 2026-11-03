@@ -1,0 +1,53 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="top" cx="42%" cy="35%" r="60%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#1C2A45"/>
+      <stop offset="60%" stop-color="#111A2C"/>
+      <stop offset="100%" stop-color="#080C17"/>
+    </radialGradient>
+    <radialGradient id="bot" cx="58%" cy="72%" r="55%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#172035"/>
+      <stop offset="100%" stop-color="#080C17"/>
+    </radialGradient>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F6C945" stop-opacity="0.9"/>
+      <stop offset="40%" stop-color="#F6C945"/>
+      <stop offset="100%" stop-color="#C89A1A" stop-opacity="0.85"/>
+    </linearGradient>
+    <radialGradient id="btn" cx="40%" cy="35%" r="65%" gradientUnits="objectBoundingBox">
+      <stop offset="0%" stop-color="#FFF0A0"/>
+      <stop offset="45%" stop-color="#F6C945"/>
+      <stop offset="100%" stop-color="#A07010"/>
+    </radialGradient>
+    <clipPath id="clip">
+      <circle cx="50" cy="50" r="44"/>
+    </clipPath>
+  </defs>
+
+  <!-- Ball body -->
+  <g clip-path="url(#clip)">
+    <!-- Top half -->
+    <rect x="6" y="6" width="88" height="44" fill="url(#top)"/>
+    <!-- Bottom half -->
+    <rect x="6" y="50" width="88" height="44" fill="url(#bot)"/>
+    <!-- Gold band -->
+    <rect x="6" y="43" width="88" height="14" fill="url(#band)"/>
+    <!-- Top sheen -->
+    <ellipse cx="50" cy="26" rx="28" ry="10" fill="white" fill-opacity="0.045"/>
+    <!-- Band rim lines -->
+    <line x1="6" y1="43" x2="94" y2="43" stroke="#F6C945" stroke-width="0.8" stroke-opacity="0.6"/>
+    <line x1="6" y1="57" x2="94" y2="57" stroke="#C89A1A" stroke-width="0.8" stroke-opacity="0.5"/>
+  </g>
+
+  <!-- Outer gold rim -->
+  <circle cx="50" cy="50" r="44" stroke="#F6C945" stroke-width="2.5" stroke-opacity="0.75" fill="none"/>
+  <!-- Inner shadow -->
+  <circle cx="50" cy="50" r="44" stroke="#080C17" stroke-width="1" stroke-opacity="0.5" fill="none"/>
+
+  <!-- Centre button outer ring -->
+  <circle cx="50" cy="50" r="11.5" fill="#080C17" stroke="#F6C945" stroke-width="2.5" stroke-opacity="0.9"/>
+  <!-- Centre button face -->
+  <circle cx="50" cy="50" r="8" fill="url(#btn)"/>
+  <!-- Specular highlight -->
+  <ellipse cx="47.5" cy="47" rx="3.5" ry="2" fill="white" fill-opacity="0.35"/>
+</svg>
