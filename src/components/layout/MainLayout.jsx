@@ -5,6 +5,8 @@ export default function MainLayout({
   activePage,
   onNavigate,
   canCompare,
+  search,
+  onSearchChange,
 }) {
   return (
     <div className="min-h-screen bg-[#080C17]">
@@ -12,6 +14,8 @@ export default function MainLayout({
         activePage={activePage}
         onNavigate={onNavigate}
         canCompare={canCompare}
+        search={search}
+        onSearchChange={onSearchChange}
       />
       {children}
     </div>

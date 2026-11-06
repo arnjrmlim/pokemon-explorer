@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
@@ -38,6 +37,43 @@ const typeColors = {
   steel: "bg-slate-400/15 text-slate-300",
   fairy: "bg-pink-500/15 text-pink-300",
 };
+
+
+const STAT_COLORS = {
+  hp: "bg-green-400",
+  attack: "bg-red-400",
+  defense: "bg-orange-400",
+  "special-attack": "bg-blue-400",
+  "special-defense": "bg-teal-400",
+  speed: "bg-yellow-400",
+};
+
+function StatBar({ stat }) {
+  const statName = stat.stat.name;
+  const value = stat.base_stat;
+  const percentage = Math.min((value / 255) * 100, 100);
+
+  return (
+    <div className="grid grid-cols-[85px_1fr_30px] items-center gap-3">
+      <span className="text-xs font-semibold text-gray-400">
+        {statLabels[statName] || statName}
+      </span>
+
+      <div className="h-2 overflow-hidden rounded-full bg-[#263149]">
+        <div
+          className={`h-full rounded-full transition-all duration-700 ease-out ${
+            STAT_COLORS[statName] || "bg-[#F6C945]"
+          }`}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+
+      <span className="text-right text-xs font-bold tabular-nums text-white">
+        {value}
+      </span>
+    </div>
+  );
+}
 
 function ComparePage({ comparedPokemon = [], onBack }) {
   const [details, setDetails] = useState([]);
@@ -233,7 +269,7 @@ function ComparePage({ comparedPokemon = [], onBack }) {
               )}
             </div>
 
-            {/* Stats Comparison */}
+            {/* Base Stats Comparison */}
             {details.length === 2 && comparedPokemon.length === 2 && (
               <section className="mt-8 rounded-2xl border border-[#263149] bg-[#111A2C] p-5 sm:p-8">
                 <div className="mb-6 flex items-center gap-3">
@@ -243,68 +279,33 @@ function ComparePage({ comparedPokemon = [], onBack }) {
                   </h2>
                 </div>
 
-                <div className="space-y-6">
-                  {statNames.map((statName) => {
-                    const value1 = getStatValue(first, statName);
-                    const value2 = getStatValue(second, statName);
-                    const maxValue = Math.max(value1, value2, 1);
-
-                    return (
-                      <div key={statName}>
-                        <div className="mb-2 flex items-center justify-between text-sm">
-                          <span className="text-gray-400">
-                            {statLabels[statName]}
-                          </span>
-
-                          <div className="flex gap-8 font-bold tabular-nums">
-                            <span className="w-8 text-right text-white">
-                              {value1}
-                            </span>
-                            <span className="w-8 text-right text-[#F6C945]">
-                              {value2}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          {[value1, value2].map((value, index) => (
-                            <div
-                              key={index}
-                              className="h-2 overflow-hidden rounded-full bg-[#263149]"
-                            >
-                              <div
-                                className={`h-full rounded-full transition-all duration-500 ${
-                                  index === 0
-                                    ? "bg-white"
-                                    : "bg-[#F6C945]"
-                                }`}
-                                style={{
-                                  width: `${(value / maxValue) * 100}%`,
-                                }}
-                              />
-                            </div>
-                          ))}
-                        </div>
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-6">
+                  {details.map((pokemon, index) => (
+                    <div key={pokemon.id} className="min-w-0">
+                      <div className="mb-4 flex items-center justify-between gap-3">
+                        <h3
+                          className={`text-sm font-bold capitalize ${
+                            index === 0 ? "text-white" : "text-[#F6C945]"
+                          }`}
+                        >
+                          {pokemon.name}
+                        </h3>
+                        <span className="shrink-0 text-xs font-semibold text-[#F6C945]">
+                          Total:{" "}
+                          {pokemon.stats.reduce(
+                            (total, stat) => total + stat.base_stat,
+                            0
+                          )}
+                        </span>
                       </div>
-                    );
-                  })}
-                </div>
 
-                {/* Total Stats */}
-                <div className="mt-8 grid grid-cols-2 gap-4 border-t border-[#263149] pt-6">
-                  <div>
-                    <p className="text-xs text-gray-500">Total Base Stats</p>
-                    <p className="mt-1 text-2xl font-extrabold text-white">
-                      {getTotalStats(first)}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-gray-500">Total Base Stats</p>
-                    <p className="mt-1 text-2xl font-extrabold text-[#F6C945]">
-                      {getTotalStats(second)}
-                    </p>
-                  </div>
+                      <div className="space-y-4">
+                        {pokemon.stats.map((stat) => (
+                          <StatBar key={stat.stat.name} stat={stat} />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </section>
             )}

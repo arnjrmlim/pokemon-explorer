@@ -206,6 +206,8 @@ function App() {
       activePage={activePage}
       onNavigate={setActivePage}
       canCompare={comparedPokemon.length === 2}
+      search={search}
+      onSearchChange={handleSearchChange}
     >
       {isComparePage ? (
         <ComparePage
@@ -214,7 +216,11 @@ function App() {
           onBack={handleExploreClick}
         />
       ) : (
-        <main className="min-h-screen">
+        <main
+          className={`min-h-screen ${
+            comparedPokemon.length > 0 ? "pb-40 sm:pb-32" : ""
+          }`}
+        >
           <div className="mx-auto w-full max-w-[1600px] px-4 py-8 sm:px-6 lg:px-8">
 
             {/* PAGE HEADER */}
