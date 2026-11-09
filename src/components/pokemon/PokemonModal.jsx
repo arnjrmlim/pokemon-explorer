@@ -445,23 +445,23 @@ function MegaEvolutions({ megaEvolutions, selectedId, onSelect, loading }) {
 
 function ModalHeader({ isFlipped, onFlip, onClose }) {
   return (
-    <div className="mb-3 grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 px-1 sm:flex sm:justify-between">
-      {/* Branding */}
-      <div className="col-start-1 row-start-1 flex min-w-0 items-center gap-2">
-        <span className="shrink-0 text-xs font-bold tracking-[0.2em] text-[#F6C945]">
+    <div className="relative mb-3 flex shrink-0 items-center justify-between px-1">
+      {/* Left: branding */}
+      <div className="flex min-w-0 items-center gap-2">
+        <span className="text-xs font-bold tracking-[0.2em] text-[#F6C945]">
           POKÉDEX
         </span>
-        <span className="truncate text-xs text-gray-500">
+        <span className="text-xs text-gray-500">
           {isFlipped ? "Evolution Database" : "Pokémon Profile"}
         </span>
       </div>
 
-      {/* Flip toggle */}
+      {/* Centre: flip toggle */}
       <button
         type="button"
         onClick={onFlip}
         aria-label={isFlipped ? "View Pokémon details" : "View evolution line"}
-        className="col-span-2 row-start-2 mx-auto flex w-fit items-center justify-center gap-2 whitespace-nowrap text-xs font-semibold text-gray-500 transition hover:text-[#F6C945] sm:absolute sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+        className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#F6C945]"
       >
         <Rotate3D size={15} />
         <span className="hidden sm:inline">
@@ -472,12 +472,12 @@ function ModalHeader({ isFlipped, onFlip, onClose }) {
         </span>
       </button>
 
-      {/* Close */}
+      {/* Right: close */}
       <button
         type="button"
         onClick={onClose}
         aria-label="Close modal"
-        className="col-start-2 row-start-1 justify-self-end rounded-full border border-[#263149] bg-[#111A2C] p-2.5 text-gray-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
+        className="rounded-full border border-[#263149] bg-[#111A2C] p-2.5 text-gray-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
       >
         <X size={20} />
       </button>
@@ -510,7 +510,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
   }, [details?.id]);
 
   return (
-    <div className="relative flex min-h-0 flex-col items-center justify-center overflow-hidden border-b border-[#263149] bg-[#111A2C] px-3 py-2 sm:p-6 lg:border-b-0 lg:border-r">
+    <div className="relative flex min-h-0 flex-col items-center justify-center overflow-hidden border-b border-[#263149] bg-[#111A2C] p-4 sm:p-6 lg:border-b-0 lg:border-r">
       {/* Background glow */}
       <div className="absolute h-[300px] w-[300px] rounded-full bg-[#F6C945]/[0.07] blur-3xl" />
       {/* Background ring */}
@@ -532,7 +532,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
             onClick={handleShinyToggle}
             aria-label={isShiny ? "Show normal Pokémon" : "Show shiny Pokémon"}
             aria-pressed={isShiny}
-            className="group relative z-10 h-[min(26vh,230px)] w-full max-w-[360px] shrink-0 cursor-pointer rounded-2xl outline-none transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-[#F6C945] focus-visible:ring-offset-4 focus-visible:ring-offset-[#111A2C] disabled:cursor-default disabled:hover:scale-100 sm:h-[min(34vh,280px)]"
+            className="group relative z-10 h-[min(30vh,240px)] w-full max-w-[320px] cursor-pointer rounded-2xl outline-none transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-[#F6C945] focus-visible:ring-offset-4 focus-visible:ring-offset-[#111A2C] disabled:cursor-default disabled:hover:scale-100 sm:h-[min(34vh,280px)]"
             style={{ perspective: "1000px" }}
           >
             <div
@@ -582,14 +582,14 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
             </p>
           )}
 
-          <div className="relative z-10 mt-3 text-center sm:mt-5">
+          <div className="relative z-10 mt-5 text-center">
             <p className="mb-2 text-xs font-bold tracking-widest text-gray-500">
               #{formatPokemonId(details.id)}
             </p>
-            <h2 className="text-2xl font-black capitalize text-white sm:text-4xl">
+            <h2 className="text-3xl font-black capitalize text-white sm:text-4xl">
               {formatPokemonName(details.name)}
             </h2>
-            <div className="mt-3 flex flex-wrap justify-center gap-2 sm:mt-4">
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
               {details.types.map((type) => (
                 <TypeBadge key={type} type={type} />
               ))}
@@ -722,7 +722,7 @@ function ModalFront({ details, description, loading, error, isFavorite, onFavori
     <section
       aria-label="Pokémon details"
       aria-hidden={isHidden}
-      className="relative grid h-full min-h-0 grid-cols-1 grid-rows-[minmax(0,1.05fr)_minmax(0,0.95fr)] overflow-hidden rounded-[28px] border border-[#263149] bg-[#080C17] shadow-2xl lg:grid-cols-2 lg:grid-rows-1"
+      className="relative grid h-full min-h-0 grid-cols-1 grid-rows-[minmax(0,0.9fr)_minmax(0,1.1fr)] overflow-hidden rounded-[28px] border border-[#263149] bg-[#080C17] shadow-2xl lg:grid-cols-2 lg:grid-rows-1"
       style={{
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
