@@ -52,7 +52,12 @@ function formatPokemon(data) {
       data.sprites.other?.home?.front_default ||
       data.sprites.other?.["official-artwork"]?.front_default ||
       data.sprites.front_default,
-
+      
+    shinyImage:
+      data.sprites.other?.home?.front_shiny ||
+      data.sprites.front_shiny ||
+      null,
+      
     fallbackImage:
       data.sprites.other?.["official-artwork"]?.front_default ||
       data.sprites.front_default,

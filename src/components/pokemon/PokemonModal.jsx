@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useReducer, useRef } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import {
   X,
   Heart,
@@ -483,6 +490,25 @@ function ModalHeader({ isFlipped, onFlip, onClose }) {
 // ============================================================
 
 function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
+  const [isShiny, setIsShiny] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
+
+  const handleShinyToggle = () => {
+    if (isFlipping || !details?.shinyImage) return;
+
+    setIsFlipping(true);
+    setIsShiny((current) => !current);
+
+    window.setTimeout(() => {
+      setIsFlipping(false);
+    }, 700);
+  };
+
+  useEffect(() => {
+    setIsShiny(false);
+    setIsFlipping(false);
+  }, [details?.id]);
+
   return (
     <div className="relative flex min-h-0 flex-col items-center justify-center overflow-hidden border-b border-[#263149] bg-[#111A2C] p-4 sm:p-6 lg:border-b-0 lg:border-r">
       {/* Background glow */}
@@ -494,12 +520,67 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
         <PokeballIcon size={80} spinning glowing />
       ) : details ? (
         <>
-          <PokemonImage
-            src={details.image ?? details.fallbackImage}
-            alt={formatPokemonName(details.name)}
-            fallback={details.fallbackImage}
-            className="relative z-10 h-[min(30vh,240px)] w-full max-w-[320px] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] sm:h-[min(34vh,280px)]"
-          />
+          {isShiny && (
+            <span className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-[#F6C945]/40 bg-[#F6C945]/15 px-3 py-1 text-[10px] font-black tracking-[0.2em] text-[#F6C945] shadow-[0_0_15px_rgba(246,201,69,0.15)]">
+              <Sparkles size={13} strokeWidth={2.5} />
+              SHINY
+            </span>
+          )}
+          <button
+            type="button"
+            disabled={!details.shinyImage || isFlipping}
+            onClick={handleShinyToggle}
+            aria-label={isShiny ? "Show normal Pokémon" : "Show shiny Pokémon"}
+            aria-pressed={isShiny}
+            className="group relative z-10 h-[min(30vh,240px)] w-full max-w-[320px] cursor-pointer rounded-2xl outline-none transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-[#F6C945] focus-visible:ring-offset-4 focus-visible:ring-offset-[#111A2C] disabled:cursor-default disabled:hover:scale-100 sm:h-[min(34vh,280px)]"
+            style={{ perspective: "1000px" }}
+          >
+            <div
+              className="relative h-full w-full"
+              style={{
+                transformStyle: "preserve-3d",
+                transform: isShiny ? "rotateY(180deg)" : "rotateY(0deg)",
+                transition: "transform 700ms ease",
+              }}
+            >
+              {/* Normal artwork - front face */}
+              <div
+                className="absolute inset-0"
+                style={{ backfaceVisibility: "hidden" }}
+              >
+                <PokemonImage
+                  src={details.image ?? details.fallbackImage}
+                  alt={formatPokemonName(details.name)}
+                  fallback={details.fallbackImage}
+                  className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)]"
+                />
+              </div>
+
+              {/* Shiny artwork - back face */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  transform: "rotateY(180deg)",
+                  backfaceVisibility: "hidden",
+                }}
+              >
+                <PokemonImage
+                  src={details.shinyImage}
+                  alt={`${formatPokemonName(details.name)} shiny`}
+                  fallback={details.image ?? details.fallbackImage}
+                  className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)]"
+                />
+              </div>
+            </div>
+          </button>
+
+          {/* Shiny interaction hint */}
+          {details.shinyImage && (
+            <p className="relative z-10 mt-2 flex items-center gap-1.5 text-[10px] font-medium tracking-wide text-gray-500">
+              <Sparkles size={12} />
+              Click Pokémon to reveal shiny form
+            </p>
+          )}
 
           <div className="relative z-10 mt-5 text-center">
             <p className="mb-2 text-xs font-bold tracking-widest text-gray-500">
