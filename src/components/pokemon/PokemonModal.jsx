@@ -556,7 +556,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
                   src={details.image ?? details.fallbackImage}
                   alt={formatPokemonName(details.name)}
                   fallback={details.fallbackImage}
-                  className="h-full w-full scale-[1.35] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 sm:scale-100"
+                  className="h-full w-full scale-[1] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] sm:scale-100"
                 />
               </div>
 
@@ -572,7 +572,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
                   src={details.shinyImage}
                   alt={`${formatPokemonName(details.name)} shiny`}
                   fallback={details.image ?? details.fallbackImage}
-                  className="h-full w-full scale-[1.35] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 sm:scale-100"
+                  className="h-full w-full scale-[1] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] sm:scale-100"
                 />
               </div>
             </div>
