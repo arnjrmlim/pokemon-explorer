@@ -109,3 +109,15 @@ export async function getPokemonForm(identifier, signal) {
 
   return fetchPokemonApi(url, signal);
 }
+
+// --------------------------------------------------
+// POKÉMON TYPE DETAILS
+// Returns type damage relations from PokéAPI.
+// --------------------------------------------------
+
+export async function getPokemonTypeDetails(type, signal) {
+  return fetchPokemonApi(
+    `${BASE_URL}/type/${type.toLowerCase()}`,
+    signal
+  );
+}
