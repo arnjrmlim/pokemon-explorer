@@ -445,39 +445,43 @@ function MegaEvolutions({ megaEvolutions, selectedId, onSelect, loading }) {
 
 function ModalHeader({ isFlipped, onFlip, onClose }) {
   return (
-    <div className="relative mb-3 flex shrink-0 items-center justify-between px-1">
-      {/* Left: branding */}
-      <div className="flex min-w-0 items-center gap-2">
-        <span className="text-xs font-bold tracking-[0.2em] text-[#F6C945]">
+    <div className="relative mb-3 grid shrink-0 grid-cols-[1fr_auto] items-center gap-y-3 px-1 sm:flex sm:justify-between">
+
+      {/* Branding */}
+      <div className="col-start-1 row-start-1 flex min-w-0 items-center gap-2">
+        <span className="shrink-0 text-xs font-bold tracking-[0.2em] text-[#F6C945]">
           POKÉDEX
         </span>
+
         <span className="text-xs text-gray-500">
-          {isFlipped ? "Evolution Database" : "Pokémon Profile"}
+          Pokémon Profile
         </span>
       </div>
 
-      {/* Centre: flip toggle */}
+      {/* Evolution toggle */}
       <button
         type="button"
         onClick={onFlip}
         aria-label={isFlipped ? "View Pokémon details" : "View evolution line"}
-        className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-xs font-semibold text-gray-500 transition hover:text-[#F6C945]"
+        className="col-span-2 row-start-2 mx-auto flex w-fit items-center justify-center gap-2 whitespace-nowrap text-xs font-semibold text-gray-500 transition hover:text-[#F6C945]"
       >
         <Rotate3D size={15} />
+
         <span className="hidden sm:inline">
           {isFlipped ? "View Pokémon Details" : "Flip to Evolution Line"}
         </span>
+
         <span className="sm:hidden">
           {isFlipped ? "View Details" : "Evolution"}
         </span>
       </button>
 
-      {/* Right: close */}
+      {/* Close button */}
       <button
         type="button"
         onClick={onClose}
         aria-label="Close modal"
-        className="rounded-full border border-[#263149] bg-[#111A2C] p-2.5 text-gray-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
+        className="col-start-2 row-start-1 justify-self-end rounded-full border border-[#263149] bg-[#111A2C] p-2.5 text-gray-400 transition hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-400"
       >
         <X size={20} />
       </button>
@@ -512,9 +516,9 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
   return (
     <div className="relative flex min-h-0 flex-col items-center justify-center overflow-hidden border-b border-[#263149] bg-[#111A2C] p-4 sm:p-6 lg:border-b-0 lg:border-r">
       {/* Background glow */}
-      <div className="absolute h-[300px] w-[300px] rounded-full bg-[#F6C945]/[0.07] blur-3xl" />
+      <div className="absolute h-[220px] w-[220px] rounded-full bg-[#F6C945]/[0.07] blur-3xl sm:h-[300px] sm:w-[300px]" />
       {/* Background ring */}
-      <div className="absolute h-[250px] w-[250px] rounded-full border border-white/[0.04] bg-white/[0.02] sm:h-[320px] sm:w-[320px]" />
+      <div className="absolute h-[min(55vw,220px)] w-[min(55vw,220px)] rounded-full border border-white/[0.04] bg-white/[0.02] sm:h-[320px] sm:w-[320px]" />
 
       {loading ? (
         <PokeballIcon size={80} spinning glowing />
@@ -532,7 +536,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
             onClick={handleShinyToggle}
             aria-label={isShiny ? "Show normal Pokémon" : "Show shiny Pokémon"}
             aria-pressed={isShiny}
-            className="group relative z-10 h-[min(30vh,240px)] w-full max-w-[320px] cursor-pointer rounded-2xl outline-none transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-[#F6C945] focus-visible:ring-offset-4 focus-visible:ring-offset-[#111A2C] disabled:cursor-default disabled:hover:scale-100 sm:h-[min(34vh,280px)]"
+            className="group relative z-10 h-[min(24vh,220px)] w-full max-w-[360px] shrink-0 cursor-pointer rounded-2xl outline-none transition-transform duration-300 hover:scale-[1.03] focus-visible:ring-2 focus-visible:ring-[#F6C945] focus-visible:ring-offset-4 focus-visible:ring-offset-[#111A2C] disabled:cursor-default disabled:hover:scale-100 sm:h-[min(34vh,280px)]"
             style={{ perspective: "1000px" }}
           >
             <div
@@ -552,7 +556,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
                   src={details.image ?? details.fallbackImage}
                   alt={formatPokemonName(details.name)}
                   fallback={details.fallbackImage}
-                  className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)]"
+                  className="h-full w-full scale-[1.35] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 sm:scale-100"
                 />
               </div>
 
@@ -568,7 +572,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
                   src={details.shinyImage}
                   alt={`${formatPokemonName(details.name)} shiny`}
                   fallback={details.image ?? details.fallbackImage}
-                  className="h-full w-full object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)]"
+                  className="h-full w-full scale-[1.35] object-contain drop-shadow-[0_25px_25px_rgba(0,0,0,0.4)] transition-transform duration-300 sm:scale-100"
                 />
               </div>
             </div>
@@ -576,20 +580,20 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
 
           {/* Shiny interaction hint */}
           {details.shinyImage && (
-            <p className="relative z-10 mt-2 flex items-center gap-1.5 text-[10px] font-medium tracking-wide text-gray-500">
+            <p className="relative z-10 mt-1 flex items-center gap-1.5 text-[10px] font-medium tracking-wide text-gray-500">
               <Sparkles size={12} />
               Click Pokémon to reveal shiny form
             </p>
           )}
 
-          <div className="relative z-10 mt-5 text-center">
+          <div className="relative z-10 mt-2 text-center">
             <p className="mb-2 text-xs font-bold tracking-widest text-gray-500">
               #{formatPokemonId(details.id)}
             </p>
             <h2 className="text-3xl font-black capitalize text-white sm:text-4xl">
               {formatPokemonName(details.name)}
             </h2>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <div className="mt-2 flex flex-wrap justify-center gap-2 sm:mt-4">
               {details.types.map((type) => (
                 <TypeBadge key={type} type={type} />
               ))}
@@ -722,7 +726,7 @@ function ModalFront({ details, description, loading, error, isFavorite, onFavori
     <section
       aria-label="Pokémon details"
       aria-hidden={isHidden}
-      className="relative grid h-full min-h-0 grid-cols-1 grid-rows-[minmax(0,0.9fr)_minmax(0,1.1fr)] overflow-hidden rounded-[28px] border border-[#263149] bg-[#080C17] shadow-2xl lg:grid-cols-2 lg:grid-rows-1"
+      className="relative grid h-full min-h-0 grid-cols-1 grid-rows-[minmax(0,1.2fr)_minmax(0,0.8fr)] overflow-hidden rounded-[28px] border border-[#263149] bg-[#080C17] shadow-2xl lg:grid-cols-2 lg:grid-rows-1"
       style={{
         backfaceVisibility: "hidden",
         WebkitBackfaceVisibility: "hidden",
