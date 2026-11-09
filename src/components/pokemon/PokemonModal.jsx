@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import usePokemonDetails from "../../hooks/usePokemonDetails";
 import PokeballIcon from "../common/PokeballIcon";
+import PokemonTypeBadge from "./PokemonTypeBadge";
 
 // ============================================================
 // CONSTANTS
@@ -141,15 +142,7 @@ function PokemonImage({ src, alt, fallback, className }) {
 // ============================================================
 
 function TypeBadge({ type }) {
-  const colorClass =
-    TYPE_COLORS[type] || "bg-gray-500/15 text-gray-300 border-gray-500/20";
-  return (
-    <span
-      className={`rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-wider ${colorClass}`}
-    >
-      {type}
-    </span>
-  );
+  return <PokemonTypeBadge type={type} />;
 }
 
 // ============================================================

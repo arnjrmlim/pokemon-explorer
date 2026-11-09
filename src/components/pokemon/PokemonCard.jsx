@@ -1,25 +1,5 @@
 import { ArrowUpRight, Heart, Plus, Check } from "lucide-react";
-
-const typeColors = {
-  normal: "bg-gray-500/15 text-gray-300",
-  fire: "bg-orange-500/15 text-orange-400",
-  water: "bg-blue-500/15 text-blue-400",
-  electric: "bg-yellow-500/15 text-yellow-400",
-  grass: "bg-green-500/15 text-green-400",
-  ice: "bg-cyan-500/15 text-cyan-400",
-  fighting: "bg-red-500/15 text-red-400",
-  poison: "bg-purple-500/15 text-purple-400",
-  ground: "bg-amber-500/15 text-amber-400",
-  flying: "bg-indigo-500/15 text-indigo-400",
-  psychic: "bg-pink-500/15 text-pink-400",
-  bug: "bg-lime-500/15 text-lime-400",
-  rock: "bg-stone-500/15 text-stone-400",
-  ghost: "bg-violet-500/15 text-violet-400",
-  dragon: "bg-blue-600/15 text-blue-400",
-  dark: "bg-slate-500/15 text-slate-300",
-  steel: "bg-slate-400/15 text-slate-300",
-  fairy: "bg-pink-500/15 text-pink-300",
-};
+import PokemonTypeBadge from "./PokemonTypeBadge";
 
 function PokemonCard({
   pokemon,
@@ -168,16 +148,12 @@ function PokemonCard({
 
       {/* Pokémon Types */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {pokemon.types?.map((type) => (
-          <span
+        {pokemon.types.map((type) => (
+          <PokemonTypeBadge
             key={type}
-            className={`
-              rounded-full px-4 py-1.5 text-xs font-bold capitalize
-              ${typeColors[type] || "bg-gray-500/15 text-gray-300"}
-            `}
-          >
-            {type}
-          </span>
+            type={type}
+            size="sm"
+          />
         ))}
       </div>
     </article>
