@@ -253,13 +253,31 @@ export default function usePokemonDetails(identifier) {
         const evolutionDetails = await Promise.all(
           evolutionSpecies.map(async (species) => {
             try {
+              // Get the species data to identify its default Pokémon variety.
+              const speciesData = await getPokemonSpecies(
+                species.url,
+                controller.signal
+              );
+
+              const defaultVariety = speciesData.varieties?.find(
+                (variety) => variety.is_default
+              );
+
+              // Use the default variety URL (e.g. pyroar-male).
+              const pokemonIdentifier =
+                defaultVariety?.pokemon?.url || species.name;
+
               const pokemon = await getPokemonDetails(
-                species.name,
+                pokemonIdentifier,
                 controller.signal
               );
 
               return {
                 ...formatPokemon(pokemon),
+
+                // Preserve the species name for evolution-line display.
+                name: species.name,
+
                 isBaby: species.isBaby,
                 evolutionDetails: species.evolutionDetails,
               };
@@ -280,11 +298,19 @@ export default function usePokemonDetails(identifier) {
           evolutionDetails.filter(Boolean);
 
         // 6. Find Mega Evolutions across the entire family.
-        const megaEvolutions =
-          await getMegaEvolutionsFromFamily(
+        // Mega lookup should not prevent the evolution line from loading.
+        let megaEvolutions = [];
+
+        try {
+          megaEvolutions = await getMegaEvolutionsFromFamily(
             evolutionSpecies,
             controller.signal
           );
+        } catch (error) {
+          if (error.name === "AbortError") return;
+
+          console.warn("Unable to load Mega Evolutions:", error);
+        }
 
         // 7. Format selected Pokémon.
         const formattedPokemon = {

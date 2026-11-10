@@ -9,6 +9,7 @@ function PokemonCard({
   isCompared = false,
   onToggleCompare,
 }) {
+
   const handleFavoriteClick = (event) => {
     event.stopPropagation();
     onToggleFavorite?.(pokemon);
@@ -47,51 +48,69 @@ function PokemonCard({
         </span>
 
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              onToggleCompare?.(pokemon);
-            }}
-            aria-label={
-              isCompared
-                ? `Remove ${pokemon.name} from comparison`
-                : `Add ${pokemon.name} to comparison`
-            }
-            aria-pressed={isCompared}
-            className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
-              isCompared
-                ? "text-[#F6C945]"
-                : "text-gray-500 hover:text-[#F6C945]"
-            }`}
-          >
-            {isCompared ? <Check size={19} /> : <Plus size={19} />}
-          </button>
+          <div className="group/tooltip relative">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggleCompare?.(pokemon);
+              }}
+              aria-label={
+                isCompared
+                  ? `Remove ${pokemon.name} from comparison`
+                  : `Add ${pokemon.name} to comparison`
+              }
+              aria-pressed={isCompared}
+              className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
+                isCompared
+                  ? "text-[#F6C945]"
+                  : "text-gray-500 hover:text-[#F6C945]"
+              }`}
+            >
+              {isCompared ? <Check size={19} /> : <Plus size={19} />}
+            </button>
 
-          <button
-            type="button"
-            onClick={(event) => {
-              event.stopPropagation();
-              onToggleFavorite?.(pokemon);
-            }}
-            aria-label={
-              isFavorite
-                ? `Remove ${pokemon.name} from favorites`
-                : `Add ${pokemon.name} to favorites`
-            }
-            aria-pressed={isFavorite}
-            className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
-              isFavorite
-                ? "text-red-500"
-                : "text-gray-500 hover:text-red-400"
-            }`}
-          >
-            <Heart
-              size={20}
-              strokeWidth={2}
-              fill={isFavorite ? "currentColor" : "none"}
-            />
-          </button>
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-[#263149] bg-[#080C17] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-all duration-200 group-hover/tooltip:opacity-100"
+            >
+              {isCompared ? "Remove from Compare" : "Add to Compare"}
+            </span>
+          </div>
+
+          <div className="group/favorite relative">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation();
+                onToggleFavorite?.(pokemon);
+              }}
+              aria-label={
+                isFavorite
+                  ? `Remove ${pokemon.name} from favorites`
+                  : `Add ${pokemon.name} to favorites`
+              }
+              aria-pressed={isFavorite}
+              className={`rounded-full p-2 transition-all duration-200 hover:scale-110 hover:bg-[#263149] ${
+                isFavorite
+                  ? "text-red-500"
+                  : "text-gray-500 hover:text-red-400"
+              }`}
+            >
+              <Heart
+                size={20}
+                strokeWidth={2}
+                fill={isFavorite ? "currentColor" : "none"}
+              />
+            </button>
+
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full z-50 mt-2 whitespace-nowrap rounded-md border border-[#263149] bg-[#080C17] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-all duration-200 group-hover/favorite:opacity-100"
+            >
+              {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
+            </span>
+          </div>
         </div>
       </div>
 

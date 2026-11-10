@@ -5,6 +5,7 @@ export default function MainLayout({
   activePage,
   onNavigate,
   canCompare,
+  favoritesCount,
   search,
   onSearchChange,
 }) {
@@ -14,9 +15,11 @@ export default function MainLayout({
         activePage={activePage}
         onNavigate={onNavigate}
         canCompare={canCompare}
+        favoritesCount={favoritesCount}
         search={search}
         onSearchChange={onSearchChange}
       />
+
       {children}
     </div>
   );

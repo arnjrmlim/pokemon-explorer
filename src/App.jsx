@@ -206,6 +206,7 @@ function App() {
       activePage={activePage}
       onNavigate={setActivePage}
       canCompare={comparedPokemon.length === 2}
+      favoritesCount={favorites.length}
       search={search}
       onSearchChange={handleSearchChange}
     >
@@ -237,44 +238,6 @@ function App() {
                     ? "Your personally collected Pokémon."
                     : "Discover and explore Pokémon from the Pokédex."}
                 </p>
-              </div>
-
-              {/* PAGE NAVIGATION */}
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={handleExploreClick}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                    !isFavoritesPage
-                      ? "bg-[#F6C945] text-[#080C17]"
-                      : "border border-[#263149] text-gray-400 hover:text-white"
-                  }`}
-                >
-                  <Search size={16} />
-                  Explore
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleFavoritesClick}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition ${
-                    isFavoritesPage
-                      ? "bg-[#F6C945] text-[#080C17]"
-                      : "border border-[#263149] text-gray-400 hover:text-white"
-                  }`}
-                >
-                  <Heart size={16} fill={isFavoritesPage ? "currentColor" : "none"} />
-                  Favorites
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      isFavoritesPage
-                        ? "bg-[#080C17]/10 text-[#080C17]"
-                        : "bg-[#263149] text-gray-300"
-                    }`}
-                  >
-                    {favorites.length}
-                  </span>
-                </button>
               </div>
             </div>
 
