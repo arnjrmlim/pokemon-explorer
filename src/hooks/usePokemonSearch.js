@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   getPokemonList,
   getPokemonDetails,
@@ -67,33 +67,52 @@ async function fetchDetails(entries, signal) {
 }
 
 // Returns cached full name list, fetching only once globally.
-async function getOrFetchAllNames(signal) {
+// Shared requests must not use an individual hook's AbortSignal.
+async function getOrFetchAllNames() {
   if (allNamesCache) return allNamesCache;
+
   if (!allNamesFetching) {
-    allNamesFetching = getAllPokemonNames(signal).then((data) => {
-      allNamesCache = data.results; // [{ name, url }]
-      return allNamesCache;
-    });
+    allNamesFetching = getAllPokemonNames()
+      .then((data) => {
+        allNamesCache = data.results;
+        return allNamesCache;
+      })
+      .catch((error) => {
+        // Allow a future search to retry after a failed request.
+        allNamesFetching = null;
+        throw error;
+      });
   }
+
   return allNamesFetching;
 }
 
 // Returns cached type entry list, fetching only once per type.
-async function getOrFetchByType(type, signal) {
+async function getOrFetchByType(type) {
   if (typeCache.has(type)) return typeCache.get(type);
+
   if (!typeFetching.has(type)) {
-    const promise = getPokemonByType(type, signal).then((data) => {
-      // data.pokemon is [{ pokemon: { name, url }, slot }]
-      const entries = data.pokemon.map((p) => ({
-        name: p.pokemon.name,
-        url: p.pokemon.url,
-      }));
-      typeCache.set(type, entries);
-      typeFetching.delete(type);
-      return entries;
-    });
-    typeFetching.set(type, promise);
+    const request = getPokemonByType(type)
+      .then((data) => {
+        const entries = data.pokemon.map((item) => ({
+          name: item.pokemon.name,
+          url: item.pokemon.url,
+        }));
+
+        typeCache.set(type, entries);
+        typeFetching.delete(type);
+
+        return entries;
+      })
+      .catch((error) => {
+        // Remove failed requests so the next search can retry.
+        typeFetching.delete(type);
+        throw error;
+      });
+
+    typeFetching.set(type, request);
   }
+
   return typeFetching.get(type);
 }
 
@@ -171,16 +190,16 @@ export default function usePokemonSearch({
 
         if (hasSearch && !hasType) {
           // All names, filtered by search term
-          const allNames = await getOrFetchAllNames(signal);
+          const allNames = await getOrFetchAllNames();
           candidates = allNames.filter((p) => matchesSearch(p, debouncedSearch));
         } else if (!hasSearch && hasType) {
           // All names for this type
-          candidates = await getOrFetchByType(type, signal);
+          candidates = await getOrFetchByType(type);
         } else {
           // Both: intersect search results with type
           const [allNames, typeEntries] = await Promise.all([
-            getOrFetchAllNames(signal),
-            getOrFetchByType(type, signal),
+            getOrFetchAllNames(),
+            getOrFetchByType(type),
           ]);
           const typeSet = new Set(typeEntries.map((p) => p.name));
           candidates = allNames.filter(

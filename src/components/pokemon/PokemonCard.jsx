@@ -10,10 +10,6 @@ function PokemonCard({
   onToggleCompare,
 }) {
 
-  const handleFavoriteClick = (event) => {
-    event.stopPropagation();
-    onToggleFavorite?.(pokemon);
-  };
 
   const handleCardKeyDown = (event) => {
     if (event.target !== event.currentTarget) return;

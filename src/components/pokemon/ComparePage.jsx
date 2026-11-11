@@ -98,23 +98,11 @@ function ComparePage({ comparedPokemon = [], onBack }) {
     return () => controller.abort();
   }, [comparedPokemon]);
 
-  const getStatValue = (pokemon, statName) =>
-    pokemon?.stats?.find((stat) => stat.stat.name === statName)
-      ?.base_stat ?? 0;
-
-  const getTotalStats = (pokemon) =>
-    pokemon?.stats?.reduce((total, stat) => total + stat.base_stat, 0) ?? 0;
-
   const formatHeight = (height) =>
     height !== undefined ? `${(height / 10).toFixed(1)} m` : "—";
 
   const formatWeight = (weight) =>
     weight !== undefined ? `${(weight / 10).toFixed(1)} kg` : "—";
-
-  const first = details[0];
-  const second = details[1];
-
-  const statNames = Object.keys(statLabels);
 
   return (
     <main className="min-h-screen">

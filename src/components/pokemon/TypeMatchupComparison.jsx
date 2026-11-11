@@ -429,7 +429,7 @@ export default function TypeMatchupComparison({
 
             <p className="mt-4 text-[11px] leading-relaxed text-gray-500">
               Multipliers represent the effectiveness of attacks
-              matching each Pokémon's type against the opposing
+              matching each Pokémon&apos;s type against the opposing
               Pokémon. Actual battle damage also depends on stats,
               moves, abilities, and other battle conditions.
             </p>

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   Heart,
   Search,
@@ -26,6 +26,14 @@ function App() {
 
   const [activePage, setActivePage] = useState("explore");
   const [comparedPokemon, setComparedPokemon] = useState([]);
+
+  // Scroll to the top whenever the active page changes.
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [activePage]);
 
   // --------------------------------------------------
   // POKÉMON COLLECTION STATE
@@ -141,6 +149,26 @@ function App() {
     setSearch("");
     setSelectedType("all");
     setSortBy("id-asc");
+    setPage(1);
+  };
+
+  const handleNavigation = (destination) => {
+    switch (destination) {
+      case "explore":
+        handleExploreClick();
+        break;
+
+      case "favorites":
+        handleFavoritesClick();
+        break;
+
+      case "compare":
+        setActivePage("compare");
+        break;
+
+      default:
+        break;
+    }
   };
 
   // --------------------------------------------------
@@ -204,7 +232,7 @@ function App() {
   return (
     <MainLayout
       activePage={activePage}
-      onNavigate={setActivePage}
+      onNavigate={handleNavigation}
       canCompare={comparedPokemon.length === 2}
       favoritesCount={favorites.length}
       search={search}
@@ -295,7 +323,7 @@ function App() {
                   </div>
                   <h3 className="text-xl font-bold text-white">No favorites yet</h3>
                   <p className="mt-2 max-w-sm text-sm text-gray-400">
-                    You haven't saved any Pokémon yet. Explore the Pokédex and tap
+                    You haven&apos;t saved any Pokémon yet. Explore the Pokédex and tap
                     the heart icon on a Pokémon card to add it here.
                   </p>
                   <button
