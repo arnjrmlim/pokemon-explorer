@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, X, Heart } from "lucide-react";
 import PokeballIcon from "../common/PokeballIcon";
@@ -5,7 +6,6 @@ import PokeballIcon from "../common/PokeballIcon";
 export default function Header({
   activePage,
   onNavigate,
-  canCompare,
   favoritesCount = 0,
   search,
   onSearchChange,
@@ -15,11 +15,16 @@ export default function Header({
   const navItems = [
     { id: "explore", label: "Explore" },
     { id: "favorites", label: "Favorites" },
-    { id: "compare", label: "Compare" },
   ];
 
   const handleNavigate = (page) => {
     setIsSearchOpen(false);
+
+    if (page === activePage) {
+      window.location.reload();
+      return;
+    }
+
     onNavigate(page);
   };
 
@@ -36,16 +41,15 @@ export default function Header({
           onClick={() => {
             setIsSearchOpen(false);
 
-            if (activePage !== "explore") {
-              onNavigate("explore");
+            if (activePage === "explore") {
+              window.location.reload();
+              return;
             }
 
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
+            onNavigate("explore");
           }}
-          className="flex min-w-0 items-center gap-2 sm:gap-3 text-left"
+          className="flex min-w-0 items-center gap-2 text-left sm:gap-3"
+          aria-label="Go to Explore Pokémon"
         >
           <PokeballIcon size={42} />
 
@@ -63,29 +67,22 @@ export default function Header({
         <nav className="flex items-center gap-3 sm:gap-5 md:gap-8">
           {navItems.map((item) => {
             const isActive = activePage === item.id;
-            const isDisabled = item.id === "compare" && !canCompare;
 
             const tooltipMessages = {
               explore: "Explore all Pokémon",
               favorites: "View your favorite Pokémon",
-              compare: isDisabled
-                ? "Select two Pokémon to compare"
-                : "Compare Pokémon",
             };
 
             return (
               <div key={item.id} className="group/nav-tooltip relative">
                 <button
                   type="button"
-                  disabled={isDisabled}
                   onClick={() => handleNavigate(item.id)}
                   aria-current={isActive ? "page" : undefined}
                   className={`flex items-center gap-1.5 text-xs font-medium transition sm:gap-2 sm:text-sm ${
                     isActive
                       ? "text-[#F6C945]"
-                      : isDisabled
-                        ? "cursor-not-allowed text-gray-600"
-                        : "text-gray-400 hover:text-white"
+                      : "text-gray-400 hover:text-white"
                   }`}
                 >
                   {item.id === "favorites" && (
@@ -120,19 +117,6 @@ export default function Header({
             );
           })}
         </nav>
-
-        {/* Mobile Search Toggle */}
-        {activePage !== "compare" && (
-          <button
-            type="button"
-            onClick={handleSearchToggle}
-            className="ml-2 rounded-lg p-2 text-gray-400 transition hover:bg-white/10 hover:text-[#F6C945] md:hidden"
-            aria-label={isSearchOpen ? "Close search" : "Open search"}
-            aria-expanded={isSearchOpen}
-          >
-            {isSearchOpen ? <X size={21} /> : <Search size={21} />}
-          </button>
-        )}
       </div>
 
       {/* Mobile Search Field */}

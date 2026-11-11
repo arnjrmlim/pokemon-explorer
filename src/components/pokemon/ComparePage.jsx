@@ -9,6 +9,7 @@ import {
 import { getPokemonDetails } from "../../services/pokemonApi";
 import TypeMatchupComparison from "./TypeMatchupComparison";
 import PokemonTypeBadge from "./PokemonTypeBadge";
+import { getComparisonImage } from "../../utils/formatPokemon";
 
 const statLabels = {
   hp: "HP",
@@ -177,7 +178,13 @@ function ComparePage({ comparedPokemon = [], onBack }) {
           <>
             {/* Pokémon Cards */}
             <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              {comparedPokemon.map((pokemon) => (
+              {comparedPokemon.map((pokemon, index) => {
+                const pokemonData = details[index];
+                const comparisonImage = pokemonData
+                  ? getComparisonImage(pokemonData)
+                  : pokemon.image;
+
+                return (
                 <div
                   key={pokemon.id}
                   className="relative overflow-hidden rounded-2xl border border-[#263149] bg-[#111A2C] p-4 sm:p-6"
@@ -190,8 +197,15 @@ function ComparePage({ comparedPokemon = [], onBack }) {
                     <div className="absolute h-[75%] w-[75%] rounded-full bg-white/[0.04]" />
 
                     <img
-                      src={pokemon.image}
+                      src={comparisonImage}
                       alt={pokemon.name}
+                      onError={(event) => {
+                        event.currentTarget.onerror = null;
+                        event.currentTarget.src =
+                          pokemonData?.sprites?.other?.["official-artwork"]?.front_default ||
+                          pokemonData?.sprites?.front_default ||
+                          pokemon.image;
+                      }}
                       className="relative z-10 h-full w-full object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.35)]"
                     />
                   </div>
@@ -210,7 +224,8 @@ function ComparePage({ comparedPokemon = [], onBack }) {
                     ))}
                   </div>
                 </div>
-              ))}
+                );
+              })}
 
               {/* Empty Second Slot */}
               {comparedPokemon.length === 1 && (

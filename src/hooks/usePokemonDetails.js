@@ -1,6 +1,7 @@
-
 import { useEffect, useState } from "react";
-
+import formatPokemon, {
+  getProfileImage,
+} from "../utils/formatPokemon";
 import {
   getPokemonDetails,
   getPokemonSpecies,
@@ -37,50 +38,6 @@ async function getAllPokemon() {
   }
 
   return pokemonListPromise;
-}
-
-// --------------------------------------------------
-// FORMAT POKÉMON DATA
-// --------------------------------------------------
-
-function formatPokemon(data) {
-  return {
-    id: data.id,
-    name: data.name,
-
-    image:
-      data.sprites.other?.home?.front_default ||
-      data.sprites.other?.["official-artwork"]?.front_default ||
-      data.sprites.front_default,
-      
-    shinyImage:
-      data.sprites.other?.home?.front_shiny ||
-      data.sprites.front_shiny ||
-      null,
-      
-    fallbackImage:
-      data.sprites.other?.["official-artwork"]?.front_default ||
-      data.sprites.front_default,
-
-    types: data.types.map((item) => item.type.name),
-
-    abilities: data.abilities.map((item) => ({
-      name: item.ability.name,
-      isHidden: item.is_hidden,
-    })),
-
-    stats: data.stats.map((item) => ({
-      name: item.stat.name,
-      value: item.base_stat,
-    })),
-
-    height: data.height / 10,
-    weight: data.weight / 10,
-
-    baseExperience: data.base_experience,
-    species: data.species.name,
-    forms: data.forms,
-  };
 }
 
 // --------------------------------------------------
@@ -166,6 +123,9 @@ async function getMegaEvolutionsFromFamily(
 
         return {
           ...formatPokemon(data),
+          image: getProfileImage(data),
+          shinyImage: getProfileImage(data, true),
+          fallbackImage: getProfileImage(data),
           formName: data.name,
           formId: data.id,
           isMega: true,
@@ -274,6 +234,9 @@ export default function usePokemonDetails(identifier) {
 
               return {
                 ...formatPokemon(pokemon),
+                image: getProfileImage(pokemon),
+                shinyImage: getProfileImage(pokemon, true),
+                fallbackImage: getProfileImage(pokemon),
 
                 // Preserve the species name for evolution-line display.
                 name: species.name,
@@ -315,6 +278,13 @@ export default function usePokemonDetails(identifier) {
         // 7. Format selected Pokémon.
         const formattedPokemon = {
           ...formatPokemon(pokemonData),
+
+          // Modal uses Let's Go → HOME → Official → Default.
+          image: getProfileImage(pokemonData),
+          shinyImage: getProfileImage(pokemonData, true),
+
+          fallbackImage: getProfileImage(pokemonData),
+
           isMega: pokemonData.name.includes("-mega"),
         };
 

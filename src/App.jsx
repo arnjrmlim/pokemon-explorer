@@ -24,7 +24,14 @@ function App() {
   // PAGE STATE
   // --------------------------------------------------
 
-  const [activePage, setActivePage] = useState("explore");
+  const [activePage, setActivePage] = useState(() => {
+    return sessionStorage.getItem("pokemon-explorer-active-page") || "explore";
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("pokemon-explorer-active-page", activePage);
+  }, [activePage]);
+
   const [comparedPokemon, setComparedPokemon] = useState([]);
 
   // Scroll to the top whenever the active page changes.
@@ -274,18 +281,21 @@ function App() {
 
               {/* SEARCH AND FILTERS */}
               {!isEmptyFavorites && (
-                <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="mb-8 flex w-full items-center gap-2 sm:gap-4">
                   <div className="min-w-0 flex-1">
                     <SearchBar value={search} onChange={handleSearchChange} />
                   </div>
-                  <FilterMenu
-                    selectedType={selectedType}
-                    onTypeChange={handleTypeChange}
-                    sortBy={sortBy}
-                    onSortChange={setSortBy}
-                    limit={limit}
-                    onLimitChange={handleLimitChange}
-                  />
+
+                  <div className="shrink-0">
+                    <FilterMenu
+                      selectedType={selectedType}
+                      onTypeChange={handleTypeChange}
+                      sortBy={sortBy}
+                      onSortChange={setSortBy}
+                      limit={limit}
+                      onLimitChange={handleLimitChange}
+                    />
+                  </div>
                 </div>
               )}
 

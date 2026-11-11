@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import formatPokemon from "../utils/formatPokemon";
 import {
   getPokemonList,
   getPokemonDetails,
@@ -18,25 +19,6 @@ let allNamesFetching = null; // in-flight Promise so we don't double-fetch
 // Map<type, { name, url }[]>  — per-type name lists
 const typeCache = new Map();
 const typeFetching = new Map();
-
-// ─────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────
-
-function formatPokemon(raw) {
-  return {
-    id: raw.id,
-    name: raw.name,
-    types: raw.types.map((t) => t.type.name),
-    image:
-      raw.sprites.other?.home?.front_default ||
-      raw.sprites.other?.["official-artwork"]?.front_default ||
-      raw.sprites.front_default,
-    fallbackImage:
-      raw.sprites.other?.["official-artwork"]?.front_default ||
-      raw.sprites.front_default,
-  };
-}
 
 // Extract the numeric ID from a PokeAPI URL.
 // "https://pokeapi.co/api/v2/pokemon/25/" → "25"

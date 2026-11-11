@@ -1,5 +1,7 @@
 
 import { useEffect, useState } from "react";
+import { getPokemonDetails } from "../services/pokemonApi";
+import formatPokemon from "../utils/formatPokemon";
 
 const STORAGE_KEY = "pokemon-explorer-favorites";
 
@@ -14,9 +16,69 @@ function useFavorites() {
     }
   });
 
+  // Refresh saved Pokémon using the latest formatter.
+  useEffect(() => {
+    if (!favorites.length) return;
+
+    const controller = new AbortController();
+
+    async function refreshFavorites() {
+      const results = await Promise.all(
+        favorites.map(async (pokemon) => {
+          try {
+            const data = await getPokemonDetails(
+              pokemon.id,
+              controller.signal
+            );
+
+            return {
+              id: pokemon.id,
+              ...formatPokemon(data),
+            };
+          } catch (error) {
+            if (error.name === "AbortError") return null;
+
+            console.warn(
+              `Unable to refresh favorite ${pokemon.name}:`,
+              error
+            );
+
+            return null;
+          }
+        })
+      );
+
+      if (controller.signal.aborted) return;
+
+      const refreshedById = new Map(
+        results
+          .filter(Boolean)
+          .map((pokemon) => [pokemon.id, pokemon])
+      );
+
+      setFavorites((current) =>
+        current.map((pokemon) => ({
+          ...pokemon,
+          ...(refreshedById.get(pokemon.id) || {}),
+        }))
+      );
+    }
+
+    refreshFavorites();
+
+    return () => controller.abort();
+
+    // Refresh only when the hook initially loads.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist favorites.
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(favorites)
+      );
     } catch (error) {
       console.error("Failed to save favorites:", error);
     }
@@ -32,7 +94,9 @@ function useFavorites() {
       );
 
       if (alreadyFavorite) {
-        return current.filter((item) => item.id !== pokemon.id);
+        return current.filter(
+          (item) => item.id !== pokemon.id
+        );
       }
 
       return [...current, pokemon];
