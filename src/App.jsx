@@ -418,22 +418,22 @@ function App() {
       {/* FLOATING COMPARISON BAR */}
       {!isComparePage && comparedPokemon.length > 0 && (
         <div className="fixed bottom-5 left-1/2 z-[90] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2">
-          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[#F6C945]/30 bg-[#111A2C]/95 p-3 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:p-4">
+          <div className="flex flex-col gap-3 rounded-2xl border border-[#F6C945]/30 bg-[#111A2C]/95 p-3 shadow-[0_10px_40px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:p-4">
 
             {/* SELECTED POKÉMON */}
-            <div className="flex min-w-0 flex-1 items-center gap-2">
+            <div className="flex w-full min-w-0 flex-1 items-center gap-2 sm:w-auto">
               {comparedPokemon.map((pokemon) => (
                 <div
                   key={pokemon.id}
-                  className="flex min-w-0 items-center gap-1 rounded-xl bg-[#263149]/70 px-2 py-2 sm:gap-2 sm:px-3"
+                  className="flex min-w-0 flex-1 items-center gap-1 rounded-xl bg-[#263149]/70 px-2 py-2 sm:flex-none sm:gap-2 sm:px-3"
                 >
                   <img
                     src={pokemon.image}
                     alt={pokemon.name}
-                    className="h-8 w-8 shrink-0 object-contain"
+                    className="h-7 w-7 shrink-0 object-contain sm:h-8 sm:w-8"
                   />
 
-                  <span className="max-w-[65px] truncate text-xs font-semibold capitalize text-white sm:max-w-[90px]">
+                  <span className="min-w-0 flex-1 truncate text-xs font-semibold capitalize text-white sm:max-w-[90px]">
                     {pokemon.name}
                   </span>
 
@@ -441,7 +441,7 @@ function App() {
                     type="button"
                     onClick={() => handleToggleCompare(pokemon)}
                     aria-label={`Remove ${pokemon.name}`}
-                    className="shrink-0 text-gray-500 transition hover:text-red-400"
+                    className="shrink-0 rounded-md p-1 text-gray-500 transition hover:text-red-400"
                   >
                     <X size={14} />
                   </button>
@@ -464,7 +464,7 @@ function App() {
                   setActivePage("compare");
                 }
               }}
-              className={`flex shrink-0 items-center gap-2 rounded-xl px-3 py-3 text-xs font-bold transition sm:px-5 sm:text-sm ${
+              className={`flex w-full shrink-0 items-center justify-center gap-2 rounded-xl px-3 py-3 text-xs font-bold transition sm:w-auto sm:px-5 sm:text-sm ${
                 comparedPokemon.length === 2
                   ? "bg-[#F6C945] text-[#080C17] hover:bg-yellow-300"
                   : "cursor-not-allowed bg-[#263149] text-gray-500 opacity-60"
