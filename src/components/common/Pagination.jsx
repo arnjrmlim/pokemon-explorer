@@ -17,6 +17,23 @@ export default function Pagination({
   totalCount = 0,
 }) {
   const [pageInput, setPageInput] = useState(String(currentPage));
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile viewport and respond to resizing
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+
+    const handleResize = () => {
+      setIsMobile(mediaQuery.matches);
+    };
+
+    handleResize();
+    mediaQuery.addEventListener("change", handleResize);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleResize);
+    };
+  }, []);
 
   // Synchronize input when the current page changes
   useEffect(() => {
@@ -54,9 +71,11 @@ export default function Pagination({
     pages.add(1);
     pages.add(totalPages);
 
+    const range = isMobile ? 1 : 2;
+
     for (
-      let page = Math.max(2, currentPage - 2);
-      page <= Math.min(totalPages - 1, currentPage + 2);
+      let page = Math.max(2, currentPage - range);
+      page <= Math.min(totalPages - 1, currentPage + range);
       page++
     ) {
       pages.add(page);
@@ -69,18 +88,18 @@ export default function Pagination({
 
   // Shared button styling
   const buttonClass =
-    "flex items-center justify-center gap-1 rounded-lg border border-white/10 bg-[#111A2C] text-gray-300 transition hover:border-[#F6C945]/50 hover:text-[#F6C945] disabled:cursor-not-allowed disabled:opacity-30";
+    "flex shrink-0 items-center justify-center rounded-lg border border-white/10 bg-[#111A2C] text-gray-300 transition hover:border-[#F6C945]/50 hover:text-[#F6C945] disabled:cursor-not-allowed disabled:opacity-30";
 
   // TOP: Compact Jump to Page
   if (variant === "top") {
     return (
       <form
         onSubmit={handleJump}
-        className="flex items-center justify-center gap-2"
+        className="flex items-center justify-center gap-1.5 sm:gap-2"
       >
         <label
           htmlFor="top-page-jump"
-          className="whitespace-nowrap text-xs font-medium text-gray-500"
+          className="whitespace-nowrap text-[11px] font-medium text-gray-500 sm:text-xs"
         >
           Jump to:
         </label>
@@ -94,15 +113,15 @@ export default function Pagination({
           value={pageInput}
           onChange={(event) => setPageInput(event.target.value)}
           aria-label={`Page number, maximum ${totalPages}`}
-          className="h-9 w-16 rounded-lg border border-white/10 bg-[#111A2C] px-2 text-center text-sm font-semibold text-white outline-none transition focus:border-[#F6C945]/60"
+          className="h-8 w-12 rounded-lg border border-white/10 bg-[#111A2C] px-1 text-center text-xs font-semibold text-white outline-none transition focus:border-[#F6C945]/60 sm:h-9 sm:w-16 sm:px-2 sm:text-sm"
         />
 
         <button
           type="submit"
-          className="flex h-9 items-center gap-1 rounded-lg bg-[#F6C945] px-3 text-xs font-bold text-[#080C17] transition hover:bg-yellow-300"
+          className="flex h-8 items-center gap-1 rounded-lg bg-[#F6C945] px-2.5 text-[11px] font-bold text-[#080C17] transition hover:bg-yellow-300 sm:h-9 sm:px-3 sm:text-xs"
         >
           Go
-          <ArrowRight size={14} />
+          <ArrowRight size={13} />
         </button>
 
         <span className="hidden whitespace-nowrap text-xs text-gray-600 sm:inline">
@@ -112,12 +131,12 @@ export default function Pagination({
     );
   }
 
-  // BOTTOM: Full Pagination
+  // BOTTOM: Responsive Pagination
   return (
-    <div className="mt-10 flex flex-col items-center gap-4 border-t border-white/10 pt-7">
+    <div className="mt-10 flex w-full flex-col items-center gap-3 border-t border-white/10 pt-6 sm:gap-4 sm:pt-7">
 
       {/* Pokémon range information */}
-      <p className="text-xs text-gray-500">
+      <p className="text-center text-[11px] text-gray-500 sm:text-xs">
         Showing{" "}
         <span className="font-semibold text-gray-300">
           {startItem.toLocaleString()}–
@@ -131,15 +150,15 @@ export default function Pagination({
       </p>
 
       {/* Pagination controls */}
-      <div className="flex flex-wrap items-center justify-center gap-1.5">
+      <div className="flex w-full flex-wrap items-center justify-center gap-1 sm:gap-1.5">
 
-        {/* First Page */}
+        {/* First Page - Desktop only */}
         <button
           type="button"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
           aria-label="First page"
-          className={`${buttonClass} h-9 w-9`}
+          className={`${buttonClass} hidden h-9 w-9 sm:flex`}
         >
           <ChevronsLeft size={17} />
         </button>
@@ -150,9 +169,10 @@ export default function Pagination({
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           aria-label="Previous page"
-          className={`${buttonClass} h-9 w-9`}
+          className={`${buttonClass} h-8 w-8 sm:h-9 sm:w-9`}
         >
-          <ChevronLeft size={17} />
+          <ChevronLeft size={16} className="sm:hidden" />
+          <ChevronLeft size={17} className="hidden sm:block" />
         </button>
 
         {/* Numbered Pages */}
@@ -165,10 +185,10 @@ export default function Pagination({
           return (
             <div
               key={page}
-              className="flex items-center gap-1.5"
+              className="flex shrink-0 items-center gap-1 sm:gap-1.5"
             >
               {showEllipsis && (
-                <span className="px-1 text-sm text-gray-600">
+                <span className="px-0.5 text-xs text-gray-600 sm:px-1 sm:text-sm">
                   ...
                 </span>
               )}
@@ -180,7 +200,7 @@ export default function Pagination({
                 aria-current={
                   currentPage === page ? "page" : undefined
                 }
-                className={`h-9 min-w-9 rounded-lg border px-3 text-xs font-semibold transition ${
+                className={`h-8 min-w-8 rounded-lg border px-2 text-[11px] font-semibold transition sm:h-9 sm:min-w-9 sm:px-3 sm:text-xs ${
                   currentPage === page
                     ? "border-[#F6C945] bg-[#F6C945] text-[#080C17]"
                     : "border-white/10 bg-[#111A2C] text-gray-400 hover:border-[#F6C945]/50 hover:text-[#F6C945]"
@@ -198,18 +218,19 @@ export default function Pagination({
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           aria-label="Next page"
-          className={`${buttonClass} h-9 w-9`}
+          className={`${buttonClass} h-8 w-8 sm:h-9 sm:w-9`}
         >
-          <ChevronRight size={17} />
+          <ChevronRight size={16} className="sm:hidden" />
+          <ChevronRight size={17} className="hidden sm:block" />
         </button>
 
-        {/* Last Page */}
+        {/* Last Page - Desktop only */}
         <button
           type="button"
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
           aria-label="Last page"
-          className={`${buttonClass} h-9 w-9`}
+          className={`${buttonClass} hidden h-9 w-9 sm:flex`}
         >
           <ChevronsRight size={17} />
         </button>

@@ -300,12 +300,14 @@ function App() {
               )}
 
               {/* COLLECTION TITLE, COUNT AND JUMP */}
-              <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 className="text-lg font-bold text-white">
+              <div className="mb-5 flex w-full min-w-0 flex-row items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-base font-bold text-white sm:text-lg">
                     {isFavoritesPage ? "Saved Pokémon" : "Pokédex"}
                   </h2>
-                  <p className="mt-1 text-sm text-gray-500">{sectionSubtitle}</p>
+                  <p className="mt-1 text-xs text-gray-500 sm:text-sm">
+                    {sectionSubtitle}
+                  </p>
                 </div>
 
                 {isFavoritesPage && favorites.length > 0 && (
@@ -316,12 +318,14 @@ function App() {
                 )}
 
                 {!isFavoritesPage && totalPages > 1 && (
-                  <Pagination
-                    variant="top"
-                    currentPage={page}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                  />
+                  <div className="shrink-0">
+                    <Pagination
+                      variant="top"
+                      currentPage={page}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
                 )}
               </div>
 
