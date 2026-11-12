@@ -37,12 +37,12 @@ export default function Header({
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#080C17]/90 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:px-8">
+      <div className="mx-auto flex h-20 w-full min-w-0 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-5 lg:px-8">
         {/* Logo */}
         <button
           type="button"
           onClick={handleLogoClick}
-          className="flex min-w-0 items-center gap-2 text-left sm:gap-3"
+          className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden text-left sm:gap-3"
           aria-label="Go to Explore Pokémon"
         >
           <PokeballIcon size={42} />
@@ -104,7 +104,7 @@ export default function Header({
                 {/* Tooltip */}
                 <span
                   role="tooltip"
-                  className="pointer-events-none absolute left-1/2 top-full z-[60] mt-3 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-lg border border-[#263149] bg-[#111A2C] px-3 py-2 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-200 group-hover/nav-tooltip:translate-y-0 group-hover/nav-tooltip:opacity-100"
+                  className="pointer-events-none absolute right-0 top-full z-[60] mt-3 translate-x-0 translate-y-1 whitespace-nowrap rounded-lg border border-[#263149] bg-[#111A2C] px-3 py-2 text-xs font-medium text-white opacity-0 shadow-xl transition-all duration-200 group-hover/nav-tooltip:translate-y-0 group-hover/nav-tooltip:opacity-100"
                 >
                   {tooltipMessages[item.id]}
                 </span>

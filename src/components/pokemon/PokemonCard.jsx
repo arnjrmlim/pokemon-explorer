@@ -28,7 +28,7 @@ function PokemonCard({
       onKeyDown={handleCardKeyDown}
       aria-label={`View ${pokemon.name}`}
       className="
-        group relative flex cursor-pointer flex-col overflow-hidden
+        group relative flex w-full min-w-0 cursor-pointer flex-col overflow-hidden
         rounded-[22px] border border-[#263149] bg-[#111A2C]
         p-6 transition-all duration-300
         hover:-translate-y-1 hover:border-[#F6C945]/60
