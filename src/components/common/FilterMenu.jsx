@@ -29,6 +29,30 @@ const POKEMON_TYPES = [
   "fairy",
 ];
 
+const TYPE_IDS = {
+  normal: 1,
+  fighting: 2,
+  flying: 3,
+  poison: 4,
+  ground: 5,
+  rock: 6,
+  bug: 7,
+  ghost: 8,
+  steel: 9,
+  fire: 10,
+  water: 11,
+  grass: 12,
+  electric: 13,
+  psychic: 14,
+  ice: 15,
+  dragon: 16,
+  dark: 17,
+  fairy: 18,
+};
+
+const TYPE_SPRITE_BASE =
+  "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vii/lets-go-pikachu-lets-go-eevee/small";
+
 const SORT_OPTIONS = [
   { value: "id-asc", label: "ID: Low to High" },
   { value: "id-desc", label: "ID: High to Low" },
@@ -37,27 +61,6 @@ const SORT_OPTIONS = [
 ];
 
 const LIMIT_OPTIONS = [20, 40, 60];
-
-const TYPE_COLORS = {
-  normal: "bg-stone-500/20 text-stone-300 border-stone-500/30",
-  fire: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  water: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  electric: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
-  grass: "bg-green-500/20 text-green-400 border-green-500/30",
-  ice: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
-  fighting: "bg-red-500/20 text-red-400 border-red-500/30",
-  poison: "bg-purple-500/20 text-purple-400 border-purple-500/30",
-  ground: "bg-amber-600/20 text-amber-400 border-amber-600/30",
-  flying: "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
-  psychic: "bg-pink-500/20 text-pink-400 border-pink-500/30",
-  bug: "bg-lime-500/20 text-lime-400 border-lime-500/30",
-  rock: "bg-stone-600/20 text-stone-400 border-stone-600/30",
-  ghost: "bg-violet-500/20 text-violet-400 border-violet-500/30",
-  dragon: "bg-indigo-600/20 text-indigo-400 border-indigo-600/30",
-  dark: "bg-gray-600/30 text-gray-300 border-gray-500/30",
-  steel: "bg-slate-500/20 text-slate-300 border-slate-500/30",
-  fairy: "bg-pink-400/20 text-pink-300 border-pink-400/30",
-};
 
 export default function FilterMenu({
   selectedType,
@@ -207,17 +210,23 @@ export default function FilterMenu({
                       type="button"
                       onClick={() => onTypeChange(type)}
                       aria-pressed={isSelected}
-                      className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-semibold capitalize transition ${
+                      className={`flex items-center gap-1.5 rounded-lg border px-2 py-1.5 text-xs font-semibold capitalize transition ${
                         isSelected
-                          ? "border-[#F6C945] bg-[#F6C945]/15 text-[#F6C945]"
-                          : `${TYPE_COLORS[type]} hover:brightness-125`
+                          ? "border-[#F6C945] bg-[#F6C945]/10 text-[#F6C945]"
+                          : "border-white/10 bg-[#080C17] text-gray-300 hover:border-[#F6C945]/40 hover:bg-white/5"
                       }`}
                     >
-                      {type}
+                      <img
+                        src={`${TYPE_SPRITE_BASE}/${TYPE_IDS[type]}.png`}
+                        alt=""
+                        aria-hidden="true"
+                        loading="lazy"
+                        className="h-6 w-6 shrink-0 object-contain"
+                      />
 
-                      {isSelected && (
-                        <Check size={12} />
-                      )}
+                      <span>{type}</span>
+
+                      {isSelected && <Check size={12} />}
                     </button>
                   );
                 })}

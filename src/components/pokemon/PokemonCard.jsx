@@ -162,7 +162,7 @@ function PokemonCard({
       </div>
 
       {/* Pokémon Types */}
-      <div className="mt-4 flex flex-wrap gap-2">
+      <div className="-mt-4 flex flex-wrap gap-2">
         {pokemon.types.map((type) => (
           <PokemonTypeBadge
             key={type}

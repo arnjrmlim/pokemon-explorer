@@ -107,7 +107,7 @@ function ComparePage({ comparedPokemon = [], onBack }) {
 
   return (
     <main className="min-h-screen">
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-none px-4 py-6 sm:px-6 lg:px-8 xl:px-10">
 
         {/* Page Header */}
         <div className="mb-8">
@@ -187,13 +187,13 @@ function ComparePage({ comparedPokemon = [], onBack }) {
                 return (
                 <div
                   key={pokemon.id}
-                  className="relative overflow-hidden rounded-2xl border border-[#263149] bg-[#111A2C] p-4 sm:p-6"
+                  className="relative overflow-hidden rounded-2xl border border-[#263149] bg-[#111A2C] p-3 sm:p-4"
                 >
                   <div className="mb-3 text-xs font-bold tracking-wider text-gray-500">
                     #{String(pokemon.id).padStart(3, "0")}
                   </div>
 
-                  <div className="relative mx-auto flex aspect-square max-w-[220px] items-center justify-center">
+                  <div className="relative mx-auto flex aspect-square max-w-[190px] items-center justify-center">
                     <div className="absolute h-[75%] w-[75%] rounded-full bg-white/[0.04]" />
 
                     <img
@@ -210,17 +210,13 @@ function ComparePage({ comparedPokemon = [], onBack }) {
                     />
                   </div>
 
-                  <h2 className="mt-3 text-center text-lg font-extrabold capitalize text-white sm:text-2xl">
+                  <h2 className="mt-1 text-center text-lg font-extrabold capitalize text-white sm:text-2xl">
                     {pokemon.name}
                   </h2>
 
-                  <div className="mt-3 flex flex-wrap justify-center gap-2">
-                    {pokemon.types?.map((type) => (
-                      <PokemonTypeBadge
-                        key={type}
-                        type={type}
-                        size="sm"
-                      />
+                  <div className="-mt-3 flex flex-wrap justify-center gap-2">
+                    {pokemon.types.map((type) => (
+                      <PokemonTypeBadge key={type} type={type} size="sm" />
                     ))}
                   </div>
                 </div>
@@ -259,7 +255,7 @@ function ComparePage({ comparedPokemon = [], onBack }) {
 
             {/* Base Stats Comparison */}
             {details.length === 2 && comparedPokemon.length === 2 && (
-              <section className="mt-8 rounded-2xl border border-[#263149] bg-[#111A2C] p-5 sm:p-8">
+              <section className="mt-5 rounded-2xl border border-[#263149] bg-[#111A2C] p-4 sm:p-6">
                 <div className="mb-6 flex items-center gap-3">
                   <Zap size={20} className="text-[#F6C945]" />
                   <h2 className="text-lg font-bold text-white">
@@ -300,7 +296,7 @@ function ComparePage({ comparedPokemon = [], onBack }) {
 
             {/* Physical Attributes */}
             {details.length === 2 && comparedPokemon.length === 2 && (
-              <section className="mt-6 rounded-2xl border border-[#263149] bg-[#111A2C] p-5 sm:p-8">
+              <section className="mt-4 rounded-2xl border border-[#263149] bg-[#111A2C] p-4 sm:p-6">
                 <h2 className="mb-6 text-lg font-bold text-white">
                   Physical Attributes
                 </h2>

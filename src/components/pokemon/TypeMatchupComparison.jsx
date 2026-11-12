@@ -66,14 +66,22 @@ function TypeList({ entries, emptyMessage }) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap items-center gap-3">
       {entries.map(([type, multiplier]) => (
-        <div
-          key={type}
-          className="flex items-center gap-1.5 rounded-full border border-[#263149] bg-[#080C17] px-2 py-1"
-        >
-          <PokemonTypeBadge type={type} size="sm" />
-          <span className="text-[10px] font-bold text-gray-300">
+        <div key={type} className="flex items-center gap-1.5">
+          <PokemonTypeBadge type={type} size="md" />
+
+          <span
+            className={`text-[10px] font-bold ${
+              multiplier === 0
+                ? "text-gray-500"
+                : multiplier < 1
+                  ? "text-green-400"
+                  : multiplier > 1
+                    ? "text-red-400"
+                    : "text-gray-300"
+            }`}
+          >
             {formatMultiplier(multiplier)}
           </span>
         </div>
@@ -88,16 +96,16 @@ function DefensiveCard({ pokemon, effectiveness, index }) {
   return (
     <div className="min-w-0 rounded-xl border border-[#263149] bg-[#080C17] p-4">
       <h3
-        className={`mb-5 text-sm font-bold capitalize ${
+        className={`mb-3 text-sm font-bold capitalize ${
           index === 0 ? "text-white" : "text-[#F6C945]"
         }`}
       >
         {pokemon.name}
       </h3>
 
-      <div className="space-y-5">
+      <div className="space-y-2">
         <div>
-          <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-red-400">
+          <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wider text-red-400">
             Weaknesses
           </p>
           <TypeList
@@ -134,24 +142,24 @@ function AttackCard({ pokemon, results, index }) {
   return (
     <div className="min-w-0 rounded-xl border border-[#263149] bg-[#080C17] p-4">
       <h3
-        className={`mb-4 text-sm font-bold capitalize ${
+        className={`mb-2 text-sm font-bold capitalize ${
           index === 0 ? "text-white" : "text-[#F6C945]"
         }`}
       >
         {pokemon.name}
       </h3>
 
-      <p className="mb-3 text-xs text-gray-500">
+      <p className="mb-2 text-xs text-gray-500">
         Attacking type effectiveness
       </p>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {results.map(({ attackingType, multiplier }) => (
           <div
             key={attackingType}
             className="flex flex-wrap items-center justify-between gap-2"
           >
-            <PokemonTypeBadge type={attackingType} size="sm" />
+            <PokemonTypeBadge type={attackingType} size="md" />
 
             <span
               className={`text-sm font-bold ${
@@ -260,7 +268,7 @@ export default function TypeMatchupComparison({
     : null;
 
   return (
-    <section className="mt-8 rounded-2xl border border-[#263149] bg-[#111A2C] p-5 sm:p-8">
+    <section className="mt-5 rounded-2xl border border-[#263149] bg-[#111A2C] p-4 sm:p-6">
       <div className="mb-6 flex items-center gap-3">
         <Shield size={20} className="text-[#F6C945]" />
         <div>
@@ -286,7 +294,7 @@ export default function TypeMatchupComparison({
       )}
 
       {!loading && !error && data && (
-        <div className="space-y-8">
+        <div className="space-y-2">
           {/* TYPE ADVANTAGE SUMMARY */}
           <div className="rounded-xl border border-[#263149] bg-[#080C17] p-4 sm:p-5">
             <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -359,7 +367,7 @@ export default function TypeMatchupComparison({
                           </p>
                           <PokemonTypeBadge
                             type={best.attackingType}
-                            size="sm"
+                            size="md"
                           />
                         </div>
 
@@ -385,11 +393,11 @@ export default function TypeMatchupComparison({
 
           {/* Defensive Effectiveness */}
           <div>
-            <h3 className="mb-4 text-sm font-bold text-white">
+            <h3 className="mb-3 text-sm font-bold text-white">
               Defensive Effectiveness
             </h3>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <DefensiveCard
                 pokemon={pokemonA}
                 effectiveness={data.defensiveA}
@@ -413,7 +421,7 @@ export default function TypeMatchupComparison({
               </h3>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               <AttackCard
                 pokemon={pokemonA}
                 results={data.offensiveA}
@@ -435,7 +443,7 @@ export default function TypeMatchupComparison({
             </p>
             {/* EFFECTIVENESS LEGEND */}
             <div className="border-t border-[#263149] pt-6">
-              <h3 className="mb-4 text-sm font-bold text-white">
+              <h3 className="mb-3 text-sm font-bold text-white">
                 Effectiveness Guide
               </h3>
 

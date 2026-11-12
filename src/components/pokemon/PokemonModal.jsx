@@ -561,7 +561,7 @@ function ModalArtwork({ details, loading, error, isFavorite, onFavorite }) {
             <h2 className="text-3xl font-black capitalize text-white sm:text-4xl">
               {formatPokemonName(details.name)}
             </h2>
-            <div className="mt-2 flex flex-wrap justify-center gap-2 sm:mt-4">
+            <div className="-mt-5 flex flex-wrap justify-center gap-2">
               {details.types.map((type) => (
                 <TypeBadge key={type} type={type} />
               ))}
