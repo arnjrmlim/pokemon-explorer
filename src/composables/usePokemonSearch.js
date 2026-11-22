@@ -23,6 +23,8 @@ let allNamesFetching = null;
 
 const typeCache = new Map();
 const typeFetching = new Map();
+const pokemonDetailsCache = new Map();
+const MAX_CONCURRENT_REQUESTS = 5;
 
 // Extract numeric ID from a PokéAPI URL.
 function idFromUrl(url) {
@@ -43,15 +45,51 @@ function matchesSearch(entry, term) {
 
 // Fetch details for a list of Pokémon.
 async function fetchDetails(entries, signal) {
-  return Promise.all(
-    entries.map((entry) =>
-      getPokemonDetails(
-        entry.url ?? entry.pokemon?.url ?? entry.name,
-        signal
-      )
-    )
+  const results = new Array(entries.length);
+  let currentIndex = 0;
+
+  async function worker() {
+    while (currentIndex < entries.length) {
+      if (signal.aborted) {
+        throw new DOMException("Request aborted", "AbortError");
+      }
+
+      const index = currentIndex++;
+      const entry = entries[index];
+
+      const identifier =
+        entry.url ?? entry.pokemon?.url ?? entry.name;
+
+      // Reuse previously fetched Pokémon details.
+      if (pokemonDetailsCache.has(identifier)) {
+        results[index] = pokemonDetailsCache.get(identifier);
+        continue;
+      }
+
+      const details = await getPokemonDetails(identifier, signal);
+
+      if (signal.aborted) {
+        throw new DOMException("Request aborted", "AbortError");
+      }
+
+      // Cache only successfully fetched details.
+      pokemonDetailsCache.set(identifier, details);
+      results[index] = details;
+    }
+  }
+
+  const workerCount = Math.min(
+    MAX_CONCURRENT_REQUESTS,
+    entries.length
   );
+
+  await Promise.all(
+    Array.from({ length: workerCount }, () => worker())
+  );
+
+  return results;
 }
+
 
 // Fetch the full Pokémon name list only once.
 async function getOrFetchAllNames() {
