@@ -360,20 +360,37 @@ onBeforeUnmount(() => {
                 {{ error ?? "Unable to load Pokémon." }}
               </p>
 
-              <button
-                type="button"
-                :disabled="!details"
-                :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-                :aria-pressed="isFavorite"
-                class="absolute right-6 top-6 z-20 rounded-full border border-[#263149] bg-[#080C17]/70 p-3 backdrop-blur transition hover:scale-110 disabled:opacity-40"
-                :class="isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-red-400'"
-                @click="handleFavorite"
-              >
-                <Heart
-                  :size="21"
-                  :fill="isFavorite ? 'currentColor' : 'none'"
-                />
-              </button>
+              <div class="group absolute right-6 top-6 z-20">
+                <button
+                  type="button"
+                  :disabled="!details"
+                  :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+                  :aria-pressed="isFavorite"
+                  class="relative rounded-full border border-[#263149] bg-[#080C17]/70 p-3 backdrop-blur transition hover:scale-110 disabled:opacity-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F6C945]"
+                  :class="isFavorite ? 'text-red-500' : 'text-gray-400 hover:text-red-400'"
+                  @click="handleFavorite"
+                >
+                  <Heart
+                    :size="21"
+                    :fill="isFavorite ? 'currentColor' : 'none'"
+                  />
+                </button>
+
+                <!-- Favorite Tooltip -->
+                <span
+                  role="tooltip"
+                  class="pointer-events-none absolute right-0 top-full mt-2
+                        whitespace-nowrap rounded-lg border border-[#263149]
+                        bg-[#111A2C] px-3 py-2 text-xs font-medium text-white
+                        shadow-lg opacity-0 translate-y-1
+                        transition-all duration-200
+                        group-hover:translate-y-0 group-hover:opacity-100
+                        group-focus-within:translate-y-0
+                        group-focus-within:opacity-100"
+                >
+                  {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
+                </span>
+              </div>
             </div>
 
             <!-- Information panel -->
